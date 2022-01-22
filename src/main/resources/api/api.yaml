@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+   title: Order Service - REST API
+   description: Order - REST API
+   version: 1.0.0
+   contact: {}
+# servers:
+# -  url: https://www.vincicasa.it/sisal-gn-proxy-servlet-web/proxy/gntn-info-web/rest/gioco/vincicasa
+paths:
+   /estrazioni/ultimoconcorso:
+      get:
+         operationId: getEstrazione
+         parameters:
+          - in: query
+            name: idPartner
+            schema:
+              type: string
+            required: true
+            description: Numeric ID of the user to get         
+         responses:
+            '200':
+               description: Estrazioni
+               content:
+                  application/json:
+                     schema:
+                          $ref: '#/components/schemas/DettaglioConcorso'
+         tags:
+         - Concorso
+   /estrazioni/archivioconcorso/{anno}/{mese}:
+      get:
+         operationId: getArchivioEstrazione
+         parameters:
+          - in: path
+            name: anno
+            schema:
+              type: integer
+            required: true
+            description: Numeric ID of the user to get
+          - in: path
+            name: mese
+            schema:
+              type: integer
+            required: true
+            description: Numeric ID of the user to get              
+          - in: query
+            name: idPartner
+            schema:
+              type: string
+            required: true
+            description: Numeric ID of the user to get         
+         responses:
+            '200':
+               description: Estrazioni
+               content:
+                  application/json:
+                     schema:
+                       $ref: '#/components/schemas/Concorsi'
+         tags:
+         - Concorso         
+components:
+   links: {}
+   callbacks: {}
+   schemas:
+      Concorsi:
+         type: object
+         properties:
+            concorsi:
+              type: array
+              items:
+               $ref: '#/components/schemas/ArchivioConcorso'
+      DettaglioConcorso:
+         type: object
+         properties:
+           dettaglioConcorso:
+            type: object
+            properties:
+              concorso:
+                 $ref: '#/components/schemas/Concorso'
+              dataEstrazione:
+                 type: integer
+                 format: int64
+              combinazioneVincente:
+                 $ref: '#/components/schemas/CombinazioneVincente'
+              dettaglioDisponibile:
+                 type: number
+              promozione:
+               type: string             
+      Concorso:
+         type: object
+         properties:
+            numero:
+              type: integer
+              format: int32
+            anno:
+              type: integer
+              format: int32              
+      ArchivioConcorso:
+         type: object
+         properties:
+            concorso:
+               $ref: '#/components/schemas/Concorso'
+            dataEstrazione:
+               type: integer
+               format: int64
+            combinazioneVincente:
+               $ref: '#/components/schemas/CombinazioneVincente'
+            dettaglioDisponibile:
+               type: number
+            promozione:
+               type: string               
+      CombinazioneVincente:
+         type: object
+         properties:
+            estratti:
+              type: array
+              items:
+                type: string
+tags:
+-  name: Concorso
